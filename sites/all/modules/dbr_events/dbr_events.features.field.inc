@@ -196,7 +196,7 @@ function dbr_events_field_default_fields() {
       'bundle' => 'dbr_event',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => 'Digite o local de realização do evento. Caso seja remoto, digite "Remoto". Campo opcional.',
+      'description' => 'Digite a Cidade e o Estado de realização do evento. Caso seja remoto, digite "Remoto". Campo opcional.',
       'display' => array(
         'default' => array(
           'label' => 'inline',
@@ -470,7 +470,7 @@ function dbr_events_field_default_fields() {
   // Included for use with string extractors like potx.
   t('Corpo');
   t('Data');
-  t('Digite o local de realização do evento. Caso seja remoto, digite "Remoto". Campo opcional.');
+  t('Digite a Cidade e o Estado de realização do evento. Caso seja remoto, digite "Remoto". Campo opcional.');
   t('Groups audience');
   t('Inclua palavras-chave para facilitar o cruzamento com outros conteúdos. Separe as palavras com vírgula.');
   t('Local');

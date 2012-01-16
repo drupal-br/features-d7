@@ -49,7 +49,7 @@ function dbr_showcase_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => '2',
+          'weight' => '3',
         ),
         'teaser' => array(
           'label' => 'hidden',
@@ -78,7 +78,7 @@ function dbr_showcase_field_default_fields() {
           'summary_rows' => 5,
         ),
         'type' => 'text_textarea_with_summary',
-        'weight' => '3',
+        'weight' => '4',
       ),
     ),
   );
@@ -119,7 +119,7 @@ function dbr_showcase_field_default_fields() {
       'description' => 'Digite seu nome e a URL do seu site (ou da sua empresa). Necessário incluir "http://" no início.',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'inline',
           'module' => 'link',
           'settings' => array(),
           'type' => 'link_default',
@@ -160,7 +160,7 @@ function dbr_showcase_field_default_fields() {
         'module' => 'link',
         'settings' => array(),
         'type' => 'link_field',
-        'weight' => '2',
+        'weight' => '3',
       ),
     ),
   );
@@ -201,10 +201,10 @@ function dbr_showcase_field_default_fields() {
       'description' => 'Digite a URL do projeto. Necessário incluir "http://" no início.',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'inline',
           'module' => 'link',
           'settings' => array(),
-          'type' => 'link_default',
+          'type' => 'link_url',
           'weight' => '0',
         ),
         'teaser' => array(
@@ -242,86 +242,8 @@ function dbr_showcase_field_default_fields() {
         'module' => 'link',
         'settings' => array(),
         'type' => 'link_field',
-        'weight' => '1',
+        'weight' => '2',
       ),
-    ),
-  );
-
-  // Exported field: 'node-dbr_showcase-group_audience'
-  $fields['node-dbr_showcase-group_audience'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '-1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'group_audience',
-      'foreign keys' => array(
-        'og' => array(
-          'columns' => array(
-            'gid' => 'gid',
-          ),
-          'table' => 'og',
-        ),
-      ),
-      'indexes' => array(
-        'gid' => array(
-          0 => 'gid',
-        ),
-      ),
-      'module' => 'og',
-      'no_ui' => TRUE,
-      'settings' => array(),
-      'translatable' => '0',
-      'type' => 'group',
-    ),
-    'field_instance' => array(
-      'bundle' => 'dbr_showcase',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'og',
-          'settings' => array(),
-          'type' => 'og_list_default',
-          'weight' => 3,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'group_audience',
-      'label' => 'Groups audience',
-      'required' => FALSE,
-      'settings' => array(
-        'user_register_form' => FALSE,
-      ),
-      'view modes' => array(
-        'full' => array(
-          'custom settings' => FALSE,
-          'label' => 'Full',
-          'type' => 'og_list_default',
-        ),
-        'teaser' => array(
-          'custom settings' => FALSE,
-          'label' => 'Chamada',
-          'type' => 'og_list_default',
-        ),
-      ),
-      'widget' => array(
-        'module' => 'og',
-        'settings' => array(
-          'opt_group' => 'auto',
-        ),
-        'type' => 'group_audience',
-        'weight' => 4,
-      ),
-      'widget_type' => 'group_audience',
     ),
   );
 
@@ -331,7 +253,6 @@ function dbr_showcase_field_default_fields() {
   t('Descrição');
   t('Digite a URL do projeto. Necessário incluir "http://" no início.');
   t('Digite seu nome e a URL do seu site (ou da sua empresa). Necessário incluir "http://" no início.');
-  t('Groups audience');
   t('URL');
 
   return $fields;

@@ -193,7 +193,7 @@ Include keywords to ease cross-reference with other content. Separate words with
           'module' => 'taxonomy',
           'settings' => array(),
           'type' => 'taxonomy_term_reference_link',
-          'weight' => '1',
+          'weight' => '0',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -266,7 +266,7 @@ Include keywords to ease cross-reference with other content. Separate words with
           'module' => 'taxonomy',
           'settings' => array(),
           'type' => 'taxonomy_term_reference_link',
-          'weight' => '2',
+          'weight' => '1',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -330,7 +330,7 @@ Include keywords to ease cross-reference with other content. Separate words with
           'module' => 'og',
           'settings' => array(),
           'type' => 'og_list_default',
-          'weight' => '0',
+          'weight' => '2',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -342,7 +342,7 @@ Include keywords to ease cross-reference with other content. Separate words with
       'entity_type' => 'node',
       'field_name' => 'group_audience',
       'label' => 'Groups audience',
-      'required' => FALSE,
+      'required' => 0,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
@@ -359,12 +359,13 @@ Include keywords to ease cross-reference with other content. Separate words with
         ),
       ),
       'widget' => array(
+        'active' => 1,
         'module' => 'og',
         'settings' => array(
-          'opt_group' => 'auto',
+          'opt_group' => 'never',
         ),
         'type' => 'group_audience',
-        'weight' => '1',
+        'weight' => 0,
       ),
       'widget_type' => 'group_audience',
     ),

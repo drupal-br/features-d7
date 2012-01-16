@@ -63,8 +63,8 @@ function dbr_events_field_default_fields() {
       ),
       'entity_type' => 'node',
       'field_name' => 'body',
-      'label' => 'Body',
-      'required' => 0,
+      'label' => 'Corpo',
+      'required' => 1,
       'settings' => array(
         'display_summary' => 1,
         'text_processing' => '1',
@@ -112,6 +112,7 @@ function dbr_events_field_default_fields() {
     ),
     'field_instance' => array(
       'bundle' => 'dbr_event',
+      'default_value' => NULL,
       'deleted' => '0',
       'description' => 'Selecione a data e hora do evento.',
       'display' => array(
@@ -126,7 +127,7 @@ function dbr_events_field_default_fields() {
             'multiple_to' => '',
           ),
           'type' => 'date_default',
-          'weight' => '1',
+          'weight' => '0',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -157,7 +158,7 @@ function dbr_events_field_default_fields() {
           'text_parts' => array(),
           'year_range' => '-0:+3',
         ),
-        'type' => 'date_popup',
+        'type' => 'date_select',
         'weight' => '2',
       ),
     ),
@@ -202,7 +203,7 @@ function dbr_events_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => '2',
+          'weight' => '1',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -275,7 +276,7 @@ function dbr_events_field_default_fields() {
           'module' => 'taxonomy',
           'settings' => array(),
           'type' => 'taxonomy_term_reference_link',
-          'weight' => '4',
+          'weight' => '3',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -344,7 +345,7 @@ function dbr_events_field_default_fields() {
           'module' => 'link',
           'settings' => array(),
           'type' => 'link_url',
-          'weight' => '3',
+          'weight' => '2',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -424,7 +425,7 @@ function dbr_events_field_default_fields() {
           'module' => 'og',
           'settings' => array(),
           'type' => 'og_list_default',
-          'weight' => '0',
+          'weight' => '4',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -436,7 +437,7 @@ function dbr_events_field_default_fields() {
       'entity_type' => 'node',
       'field_name' => 'group_audience',
       'label' => 'Groups audience',
-      'required' => FALSE,
+      'required' => 0,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
@@ -453,12 +454,13 @@ function dbr_events_field_default_fields() {
         ),
       ),
       'widget' => array(
+        'active' => 1,
         'module' => 'og',
         'settings' => array(
-          'opt_group' => 'auto',
+          'opt_group' => 'never',
         ),
         'type' => 'group_audience',
-        'weight' => '1',
+        'weight' => 0,
       ),
       'widget_type' => 'group_audience',
     ),
@@ -466,7 +468,7 @@ function dbr_events_field_default_fields() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Body');
+  t('Corpo');
   t('Data');
   t('Digite o local de realização do evento. Caso seja remoto, digite "Remoto". Campo opcional.');
   t('Groups audience');

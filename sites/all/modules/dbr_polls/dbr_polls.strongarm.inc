@@ -14,7 +14,7 @@ function dbr_polls_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'additional_settings__active_tab_poll';
-  $strongarm->value = 'edit-easy-social';
+  $strongarm->value = 'edit-group';
   $export['additional_settings__active_tab_poll'] = $strongarm;
 
   $strongarm = new stdClass;
@@ -160,13 +160,6 @@ function dbr_polls_strongarm() {
   $strongarm->name = 'node_submitted_poll';
   $strongarm->value = 1;
   $export['node_submitted_poll'] = $strongarm;
-
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'og_group_content_type_poll';
-  $strongarm->value = 'omitted';
-  $export['og_group_content_type_poll'] = $strongarm;
 
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

@@ -20,6 +20,65 @@ function dbr_defaults_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'easy_social_block_1_override';
+  $strongarm->value = 0;
+  $export['easy_social_block_1_override'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'easy_social_block_1_title';
+  $strongarm->value = '';
+  $export['easy_social_block_1_title'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'easy_social_block_1_type';
+  $strongarm->value = '1';
+  $export['easy_social_block_1_type'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'easy_social_block_1_widgets';
+  $strongarm->value = array(
+    'twitter' => 'twitter',
+    'facebook' => 'facebook',
+    'googleplus' => 'googleplus',
+    'linkedin' => 'linkedin',
+  );
+  $export['easy_social_block_1_widgets'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'easy_social_block_count';
+  $strongarm->value = '1';
+  $export['easy_social_block_count'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'easy_social_global_type';
+  $strongarm->value = '0';
+  $export['easy_social_global_type'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'easy_social_global_widgets';
+  $strongarm->value = array(
+    'twitter' => 'twitter',
+    'facebook' => 'facebook',
+    'googleplus' => 'googleplus',
+    'linkedin' => 0,
+  );
+  $export['easy_social_global_widgets'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'file_temporary_path';
   $strongarm->value = '/tmp';
   $export['file_temporary_path'] = $strongarm;

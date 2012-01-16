@@ -49,7 +49,7 @@ function dbr_discussions_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => 1,
+          'weight' => '3',
         ),
         'teaser' => array(
           'label' => 'hidden',
@@ -63,7 +63,7 @@ function dbr_discussions_field_default_fields() {
       ),
       'entity_type' => 'node',
       'field_name' => 'body',
-      'label' => 'Body',
+      'label' => 'Corpo',
       'required' => 1,
       'settings' => array(
         'display_summary' => 1,
@@ -127,7 +127,7 @@ function dbr_discussions_field_default_fields() {
           'module' => 'taxonomy',
           'settings' => array(),
           'type' => 'taxonomy_term_reference_link',
-          'weight' => 2,
+          'weight' => '1',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -200,7 +200,7 @@ function dbr_discussions_field_default_fields() {
           'module' => 'taxonomy',
           'settings' => array(),
           'type' => 'taxonomy_term_reference_link',
-          'weight' => 3,
+          'weight' => '0',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -264,7 +264,7 @@ function dbr_discussions_field_default_fields() {
           'module' => 'og',
           'settings' => array(),
           'type' => 'og_list_default',
-          'weight' => 0,
+          'weight' => '2',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -276,7 +276,7 @@ function dbr_discussions_field_default_fields() {
       'entity_type' => 'node',
       'field_name' => 'group_audience',
       'label' => 'Groups audience',
-      'required' => FALSE,
+      'required' => 0,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
@@ -293,12 +293,13 @@ function dbr_discussions_field_default_fields() {
         ),
       ),
       'widget' => array(
+        'active' => 1,
         'module' => 'og',
         'settings' => array(
-          'opt_group' => 'auto',
+          'opt_group' => 'never',
         ),
         'type' => 'group_audience',
-        'weight' => '1',
+        'weight' => 0,
       ),
       'widget_type' => 'group_audience',
     ),
@@ -306,7 +307,7 @@ function dbr_discussions_field_default_fields() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Body');
+  t('Corpo');
   t('Groups audience');
   t('Inclua palavras-chave para facilitar o cruzamento com outros conteúdos. Separe as palavras com vírgula.');
   t('Selecione a versão do Drupal que se aplica ao conteúdo.');

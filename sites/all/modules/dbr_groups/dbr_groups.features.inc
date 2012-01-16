@@ -20,11 +20,11 @@ function dbr_groups_ctools_plugin_api() {
 function dbr_groups_node_info() {
   $items = array(
     'dbr_group' => array(
-      'name' => t('Grupo'),
+      'name' => t('Group'),
       'base' => 'node_content',
-      'description' => t('Grupo de discussão sobre um determinado assunto.'),
+      'description' => t('Group discussion of a any subject.'),
       'has_title' => '1',
-      'title_label' => t('Grupo'),
+      'title_label' => t('Group'),
       'help' => '',
     ),
   );

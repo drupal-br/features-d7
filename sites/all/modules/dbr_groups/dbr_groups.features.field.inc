@@ -63,7 +63,7 @@ function dbr_groups_field_default_fields() {
       ),
       'entity_type' => 'node',
       'field_name' => 'body',
-      'label' => 'Descrição',
+      'label' => 'Description',
       'required' => 1,
       'settings' => array(
         'display_summary' => 1,
@@ -166,7 +166,7 @@ function dbr_groups_field_default_fields() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Descrição');
+  t('Description');
   t('Determine if this is an OG group.');
   t('Group');
 

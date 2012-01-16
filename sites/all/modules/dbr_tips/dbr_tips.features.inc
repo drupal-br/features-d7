@@ -20,11 +20,11 @@ function dbr_tips_ctools_plugin_api() {
 function dbr_tips_node_info() {
   $items = array(
     'dbr_tip' => array(
-      'name' => t('Dica'),
+      'name' => t('Tip'),
       'base' => 'node_content',
-      'description' => t('Publicações rápidas com conteúdos úteis à comunidade.'),
+      'description' => t('Quick posts with useful content to the community.'),
       'has_title' => '1',
-      'title_label' => t('Título'),
+      'title_label' => t('Title'),
       'help' => '',
     ),
   );

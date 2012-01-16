@@ -63,7 +63,7 @@ function dbr_discussions_field_default_fields() {
       ),
       'entity_type' => 'node',
       'field_name' => 'body',
-      'label' => 'Corpo',
+      'label' => 'Body',
       'required' => 1,
       'settings' => array(
         'display_summary' => 1,
@@ -163,7 +163,7 @@ function dbr_discussions_field_default_fields() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Corpo');
+  t('Body');
   t('Groups audience');
 
   return $fields;

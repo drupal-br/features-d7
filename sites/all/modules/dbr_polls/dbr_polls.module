@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the DBR Polls feature.
+ */
+
+include_once('dbr_polls.features.inc');

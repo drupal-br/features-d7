@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the DBR Defaults feature.
+ */
+
+include_once('dbr_defaults.features.inc');

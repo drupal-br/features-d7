@@ -1,0 +1,122 @@
+
+Easy Social 7.x-2.x API
+-----------------------
+The following is an overview of using the Easy Social API.
+
+For a better reading experience, try the handbook on Drupal.org: http://drupal.org/node/1347326
+
+
+DEFINING NEW WIDGET TYPES
+--------------------------
+
+- Implement hook_easy_social_widget():
+
+function mymodule_easy_social_widget() {
+  return array(
+    'my_custom_share_button' => array(
+      'name' => 'My Custom Share Button', // apears on admin pages only
+      'markup' => '_mymodule_custom_share_button_markup', // callback function that returns widget markup
+      'scripts' => array(
+        array(
+          'path' => 'http://mycustomshare.com/widget.js', // javascript include,
+          'type' => 'external', // 'external', 'module' or 'inline', defaults to 'external'
+        ),
+      ),
+      'styles' => array(
+        array(
+          'path' => drupal_get_path('module', 'easy_social') . '/css/easy_social_twitter.css', // css include - specify full path
+          'type' => 'external', // 'external', 'module' or 'inline', defaults to 'external'
+        ),
+      ),
+    ),
+  );
+}
+
+
+CREATING A MARKUP CALLBACK
+---------------------------
+
+- Define your widget's markup callback in your hook_easy_social_widgets() implementation, typically name it like this:
+
+  - '_{$MODULE_NAME}_widget_{WIDGET_NAME}_markup'
+
+  - For example:
+
+  - '_easy_social_widget_facebook_markup'
+
+- Implement the function:
+
+function _mymodule_custom_share_button_markup($url, $type, $title = NULL, $lang = 'en') {
+  // $url: The url to share
+  // $type: The type of widget, one of EASY_SOCIAL_WIDGET_HORIZONTAL or EASY_SOCIAL_WIDGET_VERTICAL
+  // $title: The title to share
+  // $lang: The widget's language (if applicable)
+
+  return <<<HTML
+this is my widget' markup, i can replace parameters with variables such as {$url} and {$title}
+HTML;
+}
+
+
+CREATING A CUSTOM SETTINGS PAGE
+-------------------------------
+
+- Implement hook_menu() and add the folowing item: (replace WIDGET_NAME with your widget's name)
+
+function mymodule_menu() {
+  $items = array();
+
+  $items['admin/config/content/easy_social/widget-extra/WIDGET_NAME'] = array(
+    'title' => 'WIDGET_NAME',
+    'description' => 'Extra settings for WIDGET_NAME',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('_easy_social_admin_config_extra_WIDGET_NAME'),
+    'access arguments' => array('administer easy social'),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  // .. add your other menu items here
+
+  return $items;
+}
+
+- Implement hook_variable_info() to describe your new variables: (replace WIDGET_NAME with your widget's name and VARIABLE_NAME with your variable' name)
+
+function mymodule_variable_info() {
+  $variables = array();
+
+  $variables['easy_social_WIDGET_NAME_VARIABLE_NAME'] = array(
+    'title' => t("Your variable's title"),
+    'default' => '', // define your variable's default value here
+    'group' => 'easy_social',
+    'token' => FALSE,  
+  );
+
+  // repeat for any other variables you want to define
+
+  return $variables;
+}
+
+- Finally, implement the settings form callback: (replace WIDGET_NAME with your widget's name and VARIABLE_NAME with your variable' name)
+
+function _easy_social_admin_config_extra_WIDGET_NAME() {
+  $form = array();
+
+  $form['easy_social_WIDGET_NAME_VARIABLE_NAME'] = array(
+    '#type' => 'textfield', // your call, this is standard Form API
+    '#title' => t("Your variable's title"),
+    '#description' => t("Your variable's description"),
+    '#default_value' => variable_get_value('easy_social_WIDGET_NAME_VARIABLE_NAME'),
+    // any other items, this is standard Form API
+  );
+
+  // repeat for any other variables you want to define
+
+  return $form;
+}
+
+
+USING CUSTOM VARIABLES DEFINED IN YOUR SETTINGS PAGE IN YOUR MARKUP CALLBACK
+-----------------------------------------------------------------------------
+
+- No secret here, use variable_get_value('easy_social_WIDGET_NAME_VARIABLE_NAME') in your markup callback!

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the DBR Discussions feature.
+ */
+
+include_once('dbr_discussions.features.inc');

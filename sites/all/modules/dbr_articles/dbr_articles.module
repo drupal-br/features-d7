@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the DBR Articles feature.
+ */
+
+include_once('dbr_articles.features.inc');

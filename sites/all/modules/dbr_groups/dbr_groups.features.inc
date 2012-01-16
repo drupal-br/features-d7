@@ -24,7 +24,7 @@ function dbr_groups_node_info() {
       'base' => 'node_content',
       'description' => t('Grupo de discussão sobre um determinado assunto.'),
       'has_title' => '1',
-      'title_label' => t('Grupo'),
+      'title_label' => t('Título'),
       'help' => '',
     ),
   );

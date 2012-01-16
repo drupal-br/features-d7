@@ -49,7 +49,7 @@ function dbr_articles_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => '1',
+          'weight' => '3',
         ),
         'teaser' => array(
           'label' => 'hidden',
@@ -107,7 +107,7 @@ function dbr_articles_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'inline',
           'module' => 'fivestar',
           'settings' => array(
             'expose' => TRUE,
@@ -189,11 +189,11 @@ function dbr_articles_field_default_fields() {
 Include keywords to ease cross-reference with other content. Separate words with commas.',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'inline',
           'module' => 'taxonomy',
           'settings' => array(),
           'type' => 'taxonomy_term_reference_link',
-          'weight' => '2',
+          'weight' => '1',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -266,7 +266,7 @@ Include keywords to ease cross-reference with other content. Separate words with
           'module' => 'taxonomy',
           'settings' => array(),
           'type' => 'taxonomy_term_reference_link',
-          'weight' => '3',
+          'weight' => '2',
         ),
         'teaser' => array(
           'label' => 'above',

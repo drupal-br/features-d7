@@ -14,7 +14,7 @@ function dbr_polls_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'additional_settings__active_tab_poll';
-  $strongarm->value = 'edit-submission';
+  $strongarm->value = 'edit-easy-social';
   $export['additional_settings__active_tab_poll'] = $strongarm;
 
   $strongarm = new stdClass;
@@ -83,6 +83,13 @@ function dbr_polls_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'easy_social_poll_enable';
+  $strongarm->value = 1;
+  $export['easy_social_poll_enable'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'easy_social_poll_enable_poll';
   $strongarm->value = 1;
   $export['easy_social_poll_enable_poll'] = $strongarm;
@@ -109,7 +116,7 @@ function dbr_polls_strongarm() {
     'twitter' => 'twitter',
     'facebook' => 'facebook',
     'googleplus' => 'googleplus',
-    'linkedin' => 'linkedin',
+    'linkedin' => 0,
   );
   $export['easy_social_poll_widgets'] = $strongarm;
 
@@ -121,7 +128,6 @@ function dbr_polls_strongarm() {
     0 => 'twitter',
     1 => 'facebook',
     2 => 'googleplus',
-    3 => 'linkedin',
   );
   $export['easy_social_poll_widgets_poll'] = $strongarm;
 
@@ -154,6 +160,13 @@ function dbr_polls_strongarm() {
   $strongarm->name = 'node_submitted_poll';
   $strongarm->value = 1;
   $export['node_submitted_poll'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'og_group_content_type_poll';
+  $strongarm->value = 'omitted';
+  $export['og_group_content_type_poll'] = $strongarm;
 
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

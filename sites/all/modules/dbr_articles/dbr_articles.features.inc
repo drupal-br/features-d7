@@ -20,11 +20,11 @@ function dbr_articles_ctools_plugin_api() {
 function dbr_articles_node_info() {
   $items = array(
     'dbr_article' => array(
-      'name' => t('Article'),
+      'name' => t('Artigo'),
       'base' => 'node_content',
-      'description' => t('Periodical contents, technical or not, published by fixed collaborators.'),
+      'description' => t('Conteúdos periódicos, técnicos ou não, publicados por colaboradores fixos.'),
       'has_title' => '1',
-      'title_label' => t('Title'),
+      'title_label' => t('Título'),
       'help' => '',
     ),
   );

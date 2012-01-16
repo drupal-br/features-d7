@@ -63,7 +63,7 @@ function dbr_articles_field_default_fields() {
       ),
       'entity_type' => 'node',
       'field_name' => 'body',
-      'label' => 'Body',
+      'label' => 'Corpo',
       'required' => 1,
       'settings' => array(
         'display_summary' => 1,
@@ -120,7 +120,9 @@ function dbr_articles_field_default_fields() {
       'bundle' => 'dbr_article',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => 'Include keywords to ease cross-reference with other content. Separate words with commas.',
+      'description' => 'Inclua palavras-chave para facilitar o cruzamento com outros conteúdos. Separe as palavras com vírgula.
+
+Include keywords to ease cross-reference with other content. Separate words with commas.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -193,7 +195,7 @@ function dbr_articles_field_default_fields() {
       'bundle' => 'dbr_article',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => 'Select the Drupal version that applies to the post.',
+      'description' => 'Selecione a versão do Drupal que se aplica ao conteúdo.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -211,7 +213,7 @@ function dbr_articles_field_default_fields() {
       ),
       'entity_type' => 'node',
       'field_name' => 'field_version',
-      'label' => 'Version',
+      'label' => 'Versão',
       'required' => 1,
       'settings' => array(
         'user_register_form' => FALSE,
@@ -306,12 +308,14 @@ function dbr_articles_field_default_fields() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Body');
+  t('Corpo');
   t('Groups audience');
-  t('Include keywords to ease cross-reference with other content. Separate words with commas.');
-  t('Select the Drupal version that applies to the post.');
+  t('Inclua palavras-chave para facilitar o cruzamento com outros conteúdos. Separe as palavras com vírgula.
+
+Include keywords to ease cross-reference with other content. Separate words with commas.');
+  t('Selecione a versão do Drupal que se aplica ao conteúdo.');
   t('Tags');
-  t('Version');
+  t('Versão');
 
   return $fields;
 }

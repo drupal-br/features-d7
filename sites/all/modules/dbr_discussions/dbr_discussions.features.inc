@@ -20,11 +20,11 @@ function dbr_discussions_ctools_plugin_api() {
 function dbr_discussions_node_info() {
   $items = array(
     'dbr_discussion' => array(
-      'name' => t('Discussion'),
+      'name' => t('Discussão'),
       'base' => 'node_content',
-      'description' => t('A doubt or curiosity that any member is interested in discussing with the group.'),
+      'description' => t('Uma dúvida ou curiosidade que um membro queira discutir com o grupo.'),
       'has_title' => '1',
-      'title_label' => t('Title'),
+      'title_label' => t('Título'),
       'help' => '',
     ),
   );

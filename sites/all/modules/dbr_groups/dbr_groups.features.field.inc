@@ -106,7 +106,7 @@ function dbr_groups_field_default_fields() {
       ),
       'module' => 'image',
       'settings' => array(
-        'default_image' => '2',
+        'default_image' => 0,
         'uri_scheme' => 'public',
       ),
       'translatable' => '0',
@@ -140,7 +140,7 @@ function dbr_groups_field_default_fields() {
       'required' => 0,
       'settings' => array(
         'alt_field' => 0,
-        'file_directory' => 'images/group',
+        'file_directory' => 'images/groups',
         'file_extensions' => 'png gif jpg jpeg',
         'max_filesize' => '20 KB',
         'max_resolution' => '150x150',

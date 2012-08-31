@@ -1,9 +1,9 @@
 <?php
+
 /**
  * @file
  * Easy social module
  */
-
 /**
  * Easy Social Widget Type constants
  */
@@ -34,6 +34,15 @@ function easy_social_permission() {
 }
 
 /**
+ * Implements hook_views_api().
+ */
+function easy_social_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
+/**
  * Implements hook_menu().
  */
 function easy_social_menu() {
@@ -56,7 +65,7 @@ function easy_social_menu() {
     'access arguments' => array('use easy social wizard'),
     'file' => 'includes/easy_social.admin.inc',
   );
-  
+
   $items['admin/config/content/easy_social/default'] = array(
     'title' => 'Settings',
     'type' => MENU_DEFAULT_LOCAL_TASK,
@@ -73,7 +82,7 @@ function easy_social_menu() {
     'file' => 'includes/easy_social.admin.inc',
     'weight' => 1,
   );
-  
+
   $items['admin/config/content/easy_social/ignore-paths'] = array(
     'title' => 'Ignore Paths',
     'description' => 'Global paths to ignore and do not display Easy Social',
@@ -168,11 +177,11 @@ function easy_social_variable_info() {
 
   $variables['easy_social_global_widgets'] = array(
     'title' => t('Easy Social Global Widgets'),
-    'default' => array('twitter', 'facebook', 'googleplus', 'linkedin'),
+    'default' => array('twitter' => 'twitter', 'facebook' => 'facebook', 'googleplus' => 'googleplus', 'linkedin' => 'linkedin'),
     'group' => 'easy_social',
     'token' => FALSE,
   );
-  
+
   $variables['easy_social_global_order'] = array(
     'title' => t('Easy Social Widget Order'),
     'default' => array('twitter', 'facebook', 'googleplus', 'linkedin'),
@@ -186,6 +195,13 @@ function easy_social_variable_info() {
   foreach ($node_types as $type => $typeobj) {
     $variables["easy_social_{$type}_enable"] = array(
       'title' => t('Enable Easy Social for nodes of type %type', array('%type' => $typeobj->name)),
+      'default' => FALSE,
+      'group' => 'easy_social',
+      'token' => FALSE,
+    );
+
+    $variables["easy_social_comment_{$type}_enable"] = array(
+      'title' => t('Enable Easy Social on comments for nodes of type %type', array('%type' => $typeobj->name)),
       'default' => FALSE,
       'group' => 'easy_social',
       'token' => FALSE,
@@ -363,7 +379,7 @@ function easy_social_theme() {
   return array(
     'easy_social_links' => array(
       'template' => 'templates/easy_social-links',
-      'variables' => array('widgets' => array(), 'widget_type' => NULL),
+      'variables' => array('widgets' => array(), 'widget_type' => NULL, 'lang' => NULL),
     ),
     'easy_social_admin_order' => array(
       'render element' => 'form',
@@ -373,14 +389,16 @@ function easy_social_theme() {
 
 /**
  * Implements hook_field_extra_fields().
- * Makes Easy Social available in Manage Display page for content types
+ * Makes Easy Social available in Manage Display page for content types and comments
  */
 function easy_social_field_extra_fields() {
   $extra = array();
   $node_types = node_type_get_types();
 
+  // Fields for node types
   foreach ($node_types as $type => $typeobj) {
     if (variable_get_value("easy_social_{$type}_enable")) {
+      //Fields for nodes
       for ($i = 1, $num = variable_get_value("easy_social_{$type}_count"); $i <= $num; ++$i) {
         if (isset($extra['node'][$type]['display'])) {
           $extra['node'][$type]['display']["easy_social_{$i}"] = array(
@@ -399,9 +417,59 @@ function easy_social_field_extra_fields() {
           );
         }
       }
+
+      //Field display for comments
+      if(module_exists('comment') && variable_get_value("easy_social_{$type}_enable")) {
+        if(variable_get_value("easy_social_comment_{$type}_enable")) {
+          $extra['comment']['comment_node_' . $type] = array(
+            'display' => array(
+              'easy_social' => array(
+                'label' => t('Easy Social'),
+                'weight' => 100,
+              ),
+            ),
+          );
+        }
+      }
     }
   }
   return $extra;
+}
+
+/**
+ * Implements hook_comment_view().
+ */
+function easy_social_comment_view($comment, $view_mode, $langcode) {
+  //current node type for this comment
+  $node_type = str_replace('comment_node_', '', $comment->node_type);
+
+  //check if the easy social is available for this comment
+  if(module_exists('comment') && variable_get_value("easy_social_{$node_type}_enable")) {
+
+    if(variable_get_value("easy_social_comment_{$node_type}_enable")) {
+      //generating the comment permalink
+      $uri = entity_uri('comment', $comment);
+      $uri['options'] += array('absolute' => TRUE);
+      $permalink = url($uri['path'], $uri['options']);
+
+      //load node object
+      $node = node_load($comment->nid);
+
+      //loading easy social stuff
+      $type = variable_get_value("easy_social_{$node_type}_type");
+      $enabled_widgets = variable_get_value("easy_social_{$node_type}_widgets");
+      $widgets = _easy_social_render_widgets($permalink, $comment->subject, $type, $enabled_widgets, $node->language);
+
+      //easy social widgets
+      $comment->content["easy_social"] = array(
+        '#theme' => 'easy_social_links',
+        '#widgets' => $widgets,
+        '#widget_type' => $type,
+        '#lang' => $node->language,
+        '#weight' => 100,
+      );
+    }
+  }
 }
 
 /**
@@ -415,11 +483,6 @@ function easy_social_node_view($node, $view_mode, $langcode) {
   if (variable_get_value("easy_social_{$node->type}_enable")) {
     $type = variable_get_value("easy_social_{$node->type}_type");
     $enabled_widgets = variable_get_value("easy_social_{$node->type}_widgets");
-    
-    if ($enabled_widgets === FALSE) {
-      $enabled_widgets = NULL;
-    }
-    
     $widgets = _easy_social_render_widgets($url, $node->title, $type, $enabled_widgets, $node->language);
     $count = variable_get_value("easy_social_{$node->type}_count");
 
@@ -429,6 +492,7 @@ function easy_social_node_view($node, $view_mode, $langcode) {
         '#theme' => 'easy_social_links',
         '#widgets' => $widgets,
         '#widget_type' => $type,
+        '#lang' => $node->language,
         '#weight' => 100 + $i,
       );
     }
@@ -438,7 +502,7 @@ function easy_social_node_view($node, $view_mode, $langcode) {
 /**
  * Returns a list of enabled social widgets
  * Results are cached
- * 
+ *
  * @return array
  */
 function easy_social_get_widgets() {
@@ -459,6 +523,16 @@ function easy_social_get_widgets() {
         $widgets = module_invoke($name, 'easy_social_widget');
         $return = array_merge($return, $widgets);
       }
+
+      // Add widgets to easy_social_global_order variable
+      $order = variable_get_value('easy_social_global_order');
+      foreach ($return as $name => $array) {
+        if (!in_array($name, $order, TRUE)) {
+          $order[] = $name;
+        }
+      }
+
+      variable_set('easy_social_global_order', $order);
 
       cache_set('easy_social_widgets', $return, 'bin', CACHE_TEMPORARY);
     }
@@ -482,7 +556,7 @@ function easy_social_easy_social_widget() {
       'markup' => '_easy_social_widget_googleplus_markup',
       'scripts' => array(
         array(
-          'path' => 'https://apis.google.com/js/plusone.js',
+          'path' => '//apis.google.com/js/plusone.js',
           'type' => 'external',
         ),
       ),
@@ -492,7 +566,7 @@ function easy_social_easy_social_widget() {
       'markup' => '_easy_social_widget_linkedin_markup',
       'scripts' => array(
         array(
-          'path' => 'http://platform.linkedin.com/in.js',
+          'path' => '//platform.linkedin.com/in.js',
           'type' => 'external',
         ),
       ),
@@ -502,7 +576,7 @@ function easy_social_easy_social_widget() {
       'markup' => '_easy_social_widget_twitter_markup',
       'scripts' => array(
         array(
-          'path' => 'http://platform.twitter.com/widgets.js',
+          'path' => '//platform.twitter.com/widgets.js',
           'type' => 'external',
         ),
       ),
@@ -544,10 +618,6 @@ function easy_social_block_view($delta = '') {
       if (variable_get_value("easy_social_block_{$i}_override")) {
         $type = variable_get_value("easy_social_block_{$i}_type");
         $enabled_widgets = variable_get_value("easy_social_block_{$i}_widgets");
-
-        if ($enabled_widgets === FALSE) {
-          $enabled_widgets = NULL;
-        }
       }
       else {
         $type = $enabled_widgets = NULL;
@@ -562,6 +632,7 @@ function easy_social_block_view($delta = '') {
           '#theme' => 'easy_social_links',
           '#widgets' => $widgets,
           '#widget_type' => $type,
+          '#lang' => $language->language,
         ),
       );
     }
@@ -570,7 +641,7 @@ function easy_social_block_view($delta = '') {
 
 /**
  * Returns whether easy_social is to be ignored in the current page
- * 
+ *
  * @return bool
  */
 function _easy_social_page_ignore() {
@@ -593,14 +664,15 @@ function _easy_social_page_ignore() {
 
 /**
  * Return an array of rendered Easy Social Widgets
- * 
+ *
  * @param string $url
- * @param string $title 
+ * @param string $title
  * @param int $type
  * @param string $enabled_widgets
+ * @param string $node->language
  * @return array
  */
-function _easy_social_render_widgets($url, $title, $type = NULL, $enabled_widgets = NULL) {
+function _easy_social_render_widgets($url, $title, $type = NULL, $enabled_widgets = NULL, $lang = 'en') {
   drupal_add_css(drupal_get_path('module', 'easy_social') . '/css/easy_social.css');
 
   if (!_easy_social_page_ignore()) {
@@ -609,26 +681,28 @@ function _easy_social_render_widgets($url, $title, $type = NULL, $enabled_widget
       $type = variable_get_value('easy_social_global_type');
     }
 
-    if (!isset($enabled_widgets)) {
+    if (!$enabled_widgets) {
       $enabled_widgets = variable_get_value('easy_social_global_widgets');
     }
-    
-    // order widgets
+
+    // Load enabled widgets.
+    $widgets = easy_social_get_widgets();
+
+    // Order widgets.
     $order = variable_get_value('easy_social_global_order');
     $ordered_widgets = array();
-    
-    foreach ($order as $key) {
-      if (in_array($key, $enabled_widgets)) {
-        $ordered_widgets[] = $key;
+
+    foreach ($order as $value) {
+      if (in_array($value, $enabled_widgets, TRUE)) {
+        $ordered_widgets[] = $value;
       }
     }
 
     $widget_links = array();
-    $widgets = easy_social_get_widgets();
-    
-    // process enabled widgets
+
+    // Process enabled widgets.
     foreach ($ordered_widgets as $service) {
-      // add javascript includes, if any
+      // Add javascript includes, if any.
       if (isset($widgets[$service]['scripts']) && is_array($widgets[$service]['scripts'])) {
         foreach ($widgets[$service]['scripts'] as $script) {
           $script_type = (isset($script['type'])) ? $script['type'] : 'external';
@@ -641,7 +715,7 @@ function _easy_social_render_widgets($url, $title, $type = NULL, $enabled_widget
         }
       }
 
-      // add css includes, if any
+      // Add css includes, if any.
       if (isset($widgets[$service]['styles']) && is_array($widgets[$service]['styles'])) {
         foreach ($widgets[$service]['styles'] as $style) {
           $style_type = (isset($style['type'])) ? $style['type'] : 'external';
@@ -654,9 +728,9 @@ function _easy_social_render_widgets($url, $title, $type = NULL, $enabled_widget
         }
       }
 
-      // add widget markup
+      // Finally, add widget markup.
       if (isset($widgets[$service]['markup'])) {
-        $widget_links[$service] = call_user_func($widgets[$service]['markup'], $url, $type, $title);
+        $widget_links[$service] = call_user_func($widgets[$service]['markup'], $url, $type, $title, $lang);
       }
     }
 
@@ -670,81 +744,106 @@ function _easy_social_render_widgets($url, $title, $type = NULL, $enabled_widget
  * Adds easy social options to node type forms.
  */
 function easy_social_form_node_type_form_alter(&$form, $form_state) {
-  $type = $form['#node_type'];
-  $options = _easy_social_get_options();
-  $form['#submit'][] = 'easy_social_node_type_form_submit';
+  $type = $form['#node_type']->type;
+  if(!empty($type)){
+    $options = _easy_social_get_options();
+    $form['#submit'][] = 'easy_social_node_type_form_submit';
 
-  $form['easy_social'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Easy Social settings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-    '#group' => 'additional_settings',
-  );
+    $form['easy_social'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Easy Social settings'),
+      '#group' => 'additional_settings',
+      '#tree' => TRUE,
+      '#attached' => array(
+        'js' => array(drupal_get_path('module', 'easy_social') . '/js/easy_social_settings_form.js'),
+      ),
+      '#attributes' => array('class' => array('easysocial-settings-form')),
+    );
 
-  $form['easy_social']["easy_social_{$type->type}_enable"] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable Easy Social'),
-    '#description' => t('Check this option to enable easy social for this content type'),
-    '#default_value' => variable_get_value("easy_social_{$type->type}_enable"),
-  );
+    $form['easy_social']["easy_social_{$type}_enable"] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable Easy Social'),
+      '#description' => t('Check this option to enable easy social for this content type'),
+      '#default_value' => variable_get_value("easy_social_{$type}_enable"),
+      '#attributes' => array('class' => array('easy-social-current-type')),
+    );
 
-  $form['easy_social']["easy_social_{$type->type}_count"] = array(
-    '#type' => 'select',
-    '#title' => t('Number of Easy Social fields'),
-    '#description' => t('You can add more than one Easy Social field to your nodes. This is useful, for example, to add the widget both at top and at the bottom of a node.'),
-    '#options' => array('1' => 1, '2' => 2),
-    '#default_value' => variable_get_value("easy_social_{$type->type}_count"),
-  );
+    if(module_exists('comment') && variable_get_value("easy_social_{$type}_enable")) {
+      $form['easy_social']["easy_social_comment_{$type}_enable"] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Enable Easy Social on comments'),
+        '#description' => t('Check this option to enable easy social for this content type\'s comments'),
+        '#default_value' => variable_get_value("easy_social_comment_{$type}_enable"),
+        '#attributes' => array('class' => array('easy-social-comment-type')),
+      );
+    }
 
-  $form['easy_social']["easy_social_{$type->type}_type"] = array(
-    '#type' => 'radios',
-    '#title' => t('Type of buttons'),
-    '#options' => array(
-      EASY_SOCIAL_WIDGET_HORIZONTAL => t('Horizontal'),
-      EASY_SOCIAL_WIDGET_VERTICAL => t('Vertical')
-    ),
-    '#default_value' => _easy_social_variable_get_value("easy_social_{$type->type}_type")
-  );
-  
-  $form['easy_social']["easy_social_{$type->type}_widgets"] = array(
-    '#type' => 'checkboxes',
-    '#title' => t('Social Widgets'),
-    '#options' => $options,
-    '#default_value' => _easy_social_variable_get_value("easy_social_{$type->type}_widgets"),
-  );
+    $form['easy_social']["easy_social_{$type}_count"] = array(
+      '#type' => 'select',
+      '#title' => t('Number of Easy Social fields'),
+      '#description' => t('You can add more than one Easy Social field to your nodes. This is useful, for example, to add the widget both at top and at the bottom of a node.'),
+      '#options' => array('1' => 1, '2' => 2),
+      '#default_value' => variable_get_value("easy_social_{$type}_count"),
+      '#attributes' => array('class' => array('easy-social-number-fields-type')),
+    );
+
+    $form['easy_social']["easy_social_{$type}_type"] = array(
+      '#type' => 'radios',
+      '#title' => t('Type of buttons'),
+      '#options' => array(
+        EASY_SOCIAL_WIDGET_HORIZONTAL => t('Horizontal'),
+        EASY_SOCIAL_WIDGET_VERTICAL => t('Vertical')
+      ),
+      '#default_value' => _easy_social_variable_get_value("easy_social_{$type}_type"),
+      '#attributes' => array('class' => array('easy-social-type-buttons')),
+    );
+
+    $form['easy_social']["easy_social_{$type}_widgets"] = array(
+      '#type' => 'checkboxes',
+      '#title' => t('Social Widgets'),
+      '#options' => $options,
+      '#default_value' => _easy_social_variable_get_value("easy_social_{$type}_widgets"),
+      '#attributes' => array('class' => array('easy-social-each-widget')),
+    );
+  }
 }
 
 /**
  * Submit callback
- * 
- * We have to clear caches after changing the number of Easy Social display widgets
  *
- * @see easy_social_form_node_type_form_alter().
+ * We have to clear caches to make the Easy Social display widgets appear/disappear in Manage Display
+ *
+ * @see easy_social_form_node_type_form_alter()
+ * @see _field_info_collate_fields()
  */
 function easy_social_node_type_form_submit(&$form, &$form_state) {
-  $clear_caches = FALSE;
-
-  foreach ($form_state['values'] as $name => $value) {
-    if (strpos($name, 'easy_social') === 0) {
-      variable_set($name, $value);
-      if (strpos($name, 'enable') !== FALSE && $value == 1) {
-        $clear_caches = TRUE;
-      }
+  if (strpos($form_state['values']['op'], 'Delete') === 0 || $form_state['triggering_element']['#parents'][0] === 'delete') {
+    // Deleting content type, therefore delete all Easy Social variables related to it.
+    foreach ($form_state['values']['easy_social'] as $name => $value) {
+      variable_del($name);
     }
   }
+  else {
+    foreach ($form_state['values']['easy_social'] as $name => $value) {
+      variable_set($name, $value);
+    }
 
-  if ($clear_caches === TRUE) {
-    // Flush all caches; no need to re-implement this.
-    module_load_include('inc', 'system', 'system.admin');
-    $form = $form_state = array();
-    system_clear_cache_submit($form, $form_state);
+    // Delete bogus variable that is automatically created.
+    // Ideally we wouldn't allow it to get created but can't seem to work around this.
+    variable_del('easy_social_' . $form_state['values']['type']);
+
+    // Don't flush caches when creating a new content type.
+    if (!empty($form_state['values']['old_type'])) {
+      // Clear cache, but only field info (performance wise)
+      // see _field_info_collate_fields()
+      cache_clear_all('field_info_fields', 'cache_field');
+    }
   }
 }
 
 /**
  * Returns Easy Social options for use in settings forms
- * 
+ *
  * @return array
  */
 function _easy_social_get_options() {
@@ -754,11 +853,11 @@ function _easy_social_get_options() {
     $widgets = easy_social_get_widgets();
     $order = variable_get_value('easy_social_global_order');
     $ordered_widgets = array();
-    
+
     foreach ($order as $key) {
       $ordered_widgets[$key] = $widgets[$key];
     }
-    
+
     $options = array();
 
     foreach ($ordered_widgets as $k => $widget) {
@@ -771,11 +870,11 @@ function _easy_social_get_options() {
 
 /**
  * Implements template_preprocess_html().
- * 
+ *
  * This is specific to Facebook Widget
  * Adds an XML namespace to the <html> tag of your document.
  * This is necessary for XFBML to work in earlier versions of Internet Explorer.
- * 
+ *
  * Ideally this should only be done when using the Facebook widget and (optimally) when using IE
  * However, this is harmless and it would be totally inefficient to check for these before adding the variable
  */
@@ -785,8 +884,8 @@ function easy_social_preprocess_html(&$variables) {
 
 /**
  * Helper function to return default values, keeping global settings in mind
- * 
- * @param string $name 
+ *
+ * @param string $name
  * @return mixed
  */
 function _easy_social_variable_get_value($name) {

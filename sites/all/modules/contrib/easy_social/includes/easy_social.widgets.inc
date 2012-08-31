@@ -9,16 +9,12 @@
  * @param $url The url to be shared
  * @param $type Generate horizontal or vertical widgets
  * @param $title The title to be shared
+ * @param $lang The language of the facebook button
  * @return string the html markup
  */
 function _easy_social_widget_facebook_markup($url, $type, $title = NULL, $lang = 'en') {
   // correct for different language identification strings
-  if ($lang === 'en') {
-    $lang = 'en_US';
-  }
-  elseif ($lang === 'en-gb') {
-    $lang = 'en_GB';
-  }
+  $lang = _easy_social_facebook_langcodes($lang);
 
   // @TODO subscribe to the 'edge.create' event through FB.Event.subscribe to track successful shares
   // this will likely be in either a seperate module or a new version
@@ -88,7 +84,7 @@ FB;
  * @param $title The title to be shared
  * @return string the html markup
  */
-function _easy_social_widget_googleplus_markup($url, $type, $title = NULL, $lang = 'en') {
+function _easy_social_widget_googleplus_markup($url, $type, $title = NULL, $lang = 'und') {
   // this widget doesn't yet offer a localization option
   // correct for different language identification strings
 //  if ($lang === 'en') {
@@ -121,7 +117,7 @@ GP;
  * @param $title The title to be shared
  * @return string the html markup
  */
-function _easy_social_widget_linkedin_markup($url, $type, $title = NULL, $lang = 'en') {
+function _easy_social_widget_linkedin_markup($url, $type, $title = NULL, $lang = 'und') {
   // this widget doesn't yet offer a localization option
   // correct for different language identification strings
 //  if ($lang === 'en') {
@@ -137,21 +133,19 @@ LI;
   return $markup;
 }
 
+
 /**
  * Generate the needed markup for the twitter share link
  * @param $url The url to be shared
  * @param $type Generate horizontal or vertical widgets
  * @param $title The title to be shared
+ * @param $lang The language of the twitter button
  * @return string the html markup
  */
-function _easy_social_widget_twitter_markup($url, $type, $title = NULL, $lang = 'en') {
+function _easy_social_widget_twitter_markup($url, $type, $title = NULL, $lang = 'und') {
+
   // correct for different language identification strings
-  if ($lang === 'en-gb') {
-    $lang = 'en';
-  }
-  elseif ($lang === 'pt-br' || $lang === 'pt-pt') {
-    $lang = 'pt';
-  }
+  $lang = _easy_social_twitter_langcodes($lang);
 
   $type = ($type == EASY_SOCIAL_WIDGET_HORIZONTAL) ? 'horizontal' : 'vertical';
 
@@ -160,13 +154,343 @@ function _easy_social_widget_twitter_markup($url, $type, $title = NULL, $lang = 
   $account_related_description = variable_get_value('easy_social_twitter_account_description');
 
   $markup = <<<TT
-<a href="http://twitter.com/share" class="twitter-share-button" 
-data-url="{$url}" 
+<a href="http://twitter.com/share" class="twitter-share-button"
+data-url="{$url}"
 data-count="{$type}"
 data-lang = "{$lang}"
-data-via="{$account_via}" 
+data-via="{$account_via}"
 data-related="{$account_related}:{$account_related_description}"
 data-text="{$title}">Tweet</a>
 TT;
   return $markup;
+}
+
+/**
+ * Twitter langcode
+ * @param $lang The drupal langcode
+ * @return string the respective supported langcode by twitter ISO 369
+ */
+function _easy_social_twitter_langcodes($lang = 'und'){
+  $languages = array();
+
+  // Undefined
+  $languages['und'] = 'en';
+
+  //Hungarian
+  $languages['hu'] = 'hu';
+
+  //Norwegian
+  $languages['nn'] = 'no';
+  $languages['nb'] = 'no';
+
+  //Malay
+  $languages['mg'] = 'msa';
+  $languages['ms'] = 'msa';
+  $languages['ml'] = 'msa';
+
+  //French
+  $languages['fr'] = 'fr';
+
+  //German
+  $languages['de'] = 'de';
+  $languages['gsw-berne'] = 'de';
+
+  //English
+  $languages['en'] = 'en';
+  $languages['en-us'] = 'en';
+  $languages['en-gb'] = 'en';
+
+  //Traditional Chinese
+  $languages['zh-hant'] = 'zh-tw';
+
+  //Filipino
+  $languages['fil'] = 'fil';
+
+  //Korean
+  $languages['ko'] = 'ko';
+
+  //Polish
+  $languages['pl'] = 'pl';
+
+  //Indonesian
+  $languages['id'] = 'id';
+
+  //Russian
+  $languages['ru'] = 'ru';
+
+  //Finnish
+  $languages['fi'] = 'fi';
+
+  //Hindi
+  $languages['hi'] = 'hi';
+
+  //Portuguese
+  $languages['pt'] = 'pt';
+  $languages['pt-br'] = 'pt';
+  $languages['pt-pt'] = 'pt';
+
+  //Italian
+  $languages['it'] = 'it';
+
+  //Danish
+  $languages['da'] = 'da';
+
+  //Swedish
+  $languages['sv'] = 'sv';
+
+  //Spanish
+  $languages['es'] = 'es';
+
+  //Dutch
+  $languages['nl'] = 'nl';
+
+  //Simplified Chinese
+  $languages['zh-hans'] = 'zh-cn';
+
+  //Turkish
+  $languages['tr'] = 'tr';
+  $languages['tk'] = 'tr';
+
+  //Japanese
+  $languages['ja'] = 'ja';
+
+  return (isset($languages[$lang]))?$languages[$lang]:'en';
+
+}
+
+/**
+ * Facebook langcode
+ * @param $lang The drupal langcode
+ * @return string the respective supported langcode by facebook II_CC
+ */
+function _easy_social_facebook_langcodes($lang = 'und') {
+  $languages = array();
+
+  // Undefined
+  $languages['und'] = 'en_US';
+
+  //Afrikaans
+  $languages['af'] = 'af_ZA';
+
+  //Arabic
+  $languages['ar'] = 'ar_AR';
+
+  //Azeri
+  $languages['az'] = 'az_AZ';
+
+  //Belarusian
+  $languages['be'] = 'be_BY';
+
+  //Bulgarian
+  $languages['bg'] = 'bg_BG';
+
+  //Bengali
+  $languages['bn'] = 'bn_IN';
+
+  //Bosnian
+  $languages['bs'] = 'bs_BA';
+
+  //Catalan
+  $languages['ca'] = 'ca_ES';
+
+  //Czech
+  $languages['cs'] = 'cs_CZ';
+
+  //Welsh
+  $languages['cy'] = 'cy_GB';
+
+  //Danish
+  $languages['da'] = 'da_DK';
+
+  //German
+  $languages['de'] = 'de_DE';
+  $languages['gsw-berne'] = 'de_DE';
+
+  //Greek
+  $languages['el'] = 'el_GR';
+
+  //English (UK)
+  $languages['en-gb'] = 'en_GB';
+
+  //English (US)
+  $languages['en'] = 'en_US';
+  $languages['en-us'] = 'en_US';
+
+  //Esperanto
+  $languages['eo'] = 'eo_EO';
+
+  //Spanish (Spain)
+  $languages['es'] = 'es_ES';
+
+  //Estonian
+  $languages['et'] = 'et_EE';
+
+  //Basque
+  $languages['eu'] = 'eu_ES';
+
+  //Persian
+  $languages['fa'] = 'fa_IR';
+
+  //Leet Speak
+  $languages['fb'] = 'fb_LT';
+
+  //Finnish
+  $languages['fi'] = 'fi_FI';
+
+  //Faroese
+  $languages['fo'] = 'fo_FO';
+
+  //French (France)
+  $languages['fr'] = 'fr_FR';
+
+  //Frisian
+  $languages['fy'] = 'fy_NL';
+
+  //Irish
+  $languages['ga'] = 'ga_IE';
+
+  //Galician
+  $languages['gl'] = 'gl_ES';
+
+  //Hebrew
+  $languages['he'] = 'he_IL';
+
+  //Hindi
+  $languages['hi'] = 'hi_IN';
+
+  //Croatian
+  $languages['hr'] = 'hr_HR';
+
+  //Hungarian
+  $languages['hu'] = 'hu_HU';
+
+  //Armenian
+  $languages['hy'] = 'hy_AM';
+
+  //Indonesian
+  $languages['id'] = 'id_ID';
+
+  //Icelandic
+  $languages['is'] = 'is_IS';
+
+  //Italian
+  $languages['it'] = 'it_IT';
+
+  //Japanese
+  $languages['ja'] = 'ja_JP';
+
+  //Georgian
+  $languages['ka'] = 'ka_GE';
+
+  //Khmer
+  $languages['km'] = 'km_KH';
+
+  //Korean
+  $languages['ko'] = 'ko_KR';
+
+  //Kurdish
+  $languages['ku'] = 'ku_TR';
+
+  //Latin
+  $languages['la'] = 'la_VA';
+
+  //Lithuanian
+  $languages['lt'] = 'lt_LT';
+
+  //Latvian
+  $languages['lv'] = 'lv_LV';
+
+  //Macedonian
+  $languages['mk'] = 'mk_MK';
+
+  //Malayalam
+  $languages['ml'] = 'ml_IN';
+
+  //Malay
+  $languages['ms'] = 'ms_MY';
+  $languages['mg'] = 'ms_MY';
+
+  //Norwegian
+  $languages['nn'] = 'nb_NO';
+  $languages['nb'] = 'nb_NO';
+
+  //Nepali
+  $languages['ne'] = 'ne_NP';
+
+  //Dutch
+  $languages['nl'] = 'nl_NL';
+
+  //Norwegian (nynorsk)
+  $languages['nn'] = 'nn_NO';
+
+  //Punjabi
+  $languages['pa'] = 'pa_IN';
+
+  //Polish
+  $languages['pl'] = 'pl_PL';
+
+  //Pashto
+  $languages['ps'] = 'ps_AF';
+
+  //Portuguese (Brazil)
+  $languages['pt'] = 'pt_BR';
+  $languages['pt-br'] = 'pt_BR';
+
+  //Portuguese (Portugal)
+  $languages['pt-pt'] = 'pt_PT';
+
+  //Romanian
+  $languages['ro'] = 'ro_RO';
+
+  //Russian
+  $languages['ru'] = 'ru_RU';
+
+  //Slovak
+  $languages['sk'] = 'sk_SK';
+
+  //Slovenian
+  $languages['sl'] = 'sl_SI';
+
+  //Albanian
+  $languages['sq'] = 'sq_AL';
+
+  //Serbian
+  $languages['sr'] = 'sr_RS';
+
+  //Swedish
+  $languages['sv'] = 'sv_SE';
+
+  //Swahili
+  $languages['sw'] = 'sw_KE';
+
+  //Tamil
+  $languages['ta'] = 'ta_IN';
+
+  //Telugu
+  $languages['te'] = 'te_IN';
+
+  //Thai
+  $languages['th'] = 'th_TH';
+
+  //Filipino
+  $languages['tl'] = 'tl_PH';
+
+  //Turkish
+  $languages['tr'] = 'tr_TR';
+  $languages['tk'] = 'tr_TR';
+
+  //Ukrainian
+  $languages['uk'] = 'uk_UA';
+
+  //Vietnamese
+  $languages['vi'] = 'vi_VN';
+
+  //Simplified Chinese (China)
+  $languages['zh-hans'] = 'zh_CN';
+
+  //Traditional Chinese (Taiwan)
+  $languages['zh-hant'] = 'zh_TW';
+
+  return (isset($languages[$lang])) ? $languages[$lang] : 'en_US';
+
 }

@@ -1,13 +1,13 @@
 <?php
 /**
  * @file Easy Social links template
- * 
+ *
  * Variables available:
  * - $widgets array with my share buttons html markup.
  * - $widget_type int constant indicating widget type
  */
 ?>
-<div class="easy_social_box clearfix <?php echo ($widget_type == EASY_SOCIAL_WIDGET_HORIZONTAL) ? 'horizontal' : 'vertical'; ?>">
+<div class="easy_social_box clearfix <?php echo ($widget_type == EASY_SOCIAL_WIDGET_HORIZONTAL) ? 'horizontal' : 'vertical'; ?> easy_social_lang_<?php echo $lang; ?>">
   <?php
     $i = 0;
     $n = count($widgets);

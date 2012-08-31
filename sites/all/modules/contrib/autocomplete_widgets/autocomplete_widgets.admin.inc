@@ -28,12 +28,14 @@ function _autocomplete_widgets_field_widget_settings_form($field, $instance) {
     '#options' => array('starts_with' => t('Starts with'), 'contains' => t('Contains')),
     '#description' => t('Select the method used to collect autocomplete suggestions. Note that <em>Contains</em> can cause performance issues on sites with thousands of records.'),
   );
-  $form['autocomplete_case'] = array(
-    '#type' => 'radios',
-    '#title' => t('Case sensitive'),
-    '#default_value' => $settings['autocomplete_case'],
-    '#options' => array(0 => t('Disabled'), 1 => t('Enabled')),
-  );
+  if ($widget['type'] != 'autocomplete_widgets_node_reference') {
+    $form['autocomplete_case'] = array(
+      '#type' => 'radios',
+      '#title' => t('Case sensitive'),
+      '#default_value' => $settings['autocomplete_case'],
+      '#options' => array(0 => t('Disabled'), 1 => t('Enabled')),
+    );
+  }
 
   switch ($widget['type']) {
     case 'autocomplete_widgets_flddata':
@@ -59,7 +61,7 @@ function _autocomplete_widgets_field_widget_settings_form($field, $instance) {
         '!drupal-strtolower-url' => 'http://api.drupal.org/api/function/drupal_strtolower/6',
       ));
       break;
-  } 
+  }
 
   $form['autocomplete_xss'] = array(
     '#type' => 'radios',
@@ -92,6 +94,22 @@ function _autocomplete_widgets_field_widget_settings_form($field, $instance) {
       '#default_value' => $settings['suggested_values'],
       '#rows' => 10,
       '#description' => t('Autocomplete requests will only respond with suggestions from this list. If a user enters a value not on this list, it will <em>not</em> be added to the autocomplete options in the future. Enter one suggestion per line.'),
+    );
+  }
+
+  if ($widget['type'] == 'autocomplete_widgets_node_reference') {
+    $settings['allowed_node_types'] = !isset($settings['allowed_node_types']) ? array() : $settings['allowed_node_types'];
+    $types = _node_types_build()->types;
+    $options= array();
+    foreach ($types as $key => $value) {
+      $options[$key] = $value->name;
+    }
+    $form['allowed_node_types'] = array(
+      '#type' => 'checkboxes',
+      '#title' => t('Allowed node types'),
+      '#options' => $options,
+      '#default_value' => $settings['allowed_node_types'],
+      '#description' => t('Autocomplete suggestions will be based on the titles of the selected nodes and existing field values.'),
     );
   }
 

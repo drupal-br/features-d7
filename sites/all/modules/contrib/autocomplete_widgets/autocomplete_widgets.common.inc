@@ -47,6 +47,9 @@ function _autocomplete_widgets_get_options($field, $string = '', $match = 'conta
     else if ($field['widget']['type'] == 'autocomplete_widgets_suggested') {
       $results[$cid] = _autocomplete_widgets_get_options_suggested($field, $string, $match, $keys, $limit);
     }
+    else if ($field['widget']['type'] == 'autocomplete_widgets_node_reference') {
+      $results[$cid] = _autocomplete_widgets_get_options_node_reference($field, $string, $match, $keys, $limit);
+    }
     else {
       $results[$cid] = array();
     }
@@ -61,18 +64,15 @@ function _autocomplete_widgets_get_options($field, $string = '', $match = 'conta
  * Options are retrieved from the allowed values defined for the field.
  */
 function _autocomplete_widgets_get_options_allowvals($field, $string = '', $match = 'contains', $keys = NULL, $limit = NULL) {
+
   $field_name = $field['field_name'];
   $allowed_values = list_allowed_values(field_info_field($field_name));
-  if (!isset($limit) || !is_numeric($limit)) {
-    $limit = count($allowed_values);
-  }
-  $case_sensitive = empty($field['widget']['autocomplete_case']);
-  if (!$case_sensitive && $match != 'equals') {
-    $string = drupal_strtolower($string);
-  }
-  $filter_xss = !empty($field['widget']['autocomplete_xss']);
-  $count = 0;
+  $limit = (!isset($limit) || !is_numeric($limit)) ? count($allowed_values) : $limit;
+  $case_sensitive = $field['widget']['settings']['autocomplete_case'];
+  $filter_xss = !empty($field['widget']['settings']['autocomplete_xss']);
   $options = array();
+  $count = 0;
+
   foreach ($allowed_values as $key => $value) {
     if ($filter_xss) {
       // Filter all HTML in $value, then trim white spaces.
@@ -97,7 +97,7 @@ function _autocomplete_widgets_get_options_allowvals($field, $string = '', $matc
       }
     }
     else {
-      $pos = strpos((!$case_sensitive ? drupal_strtolower($value) : $value), $string);
+      $pos = $case_sensitive ? strpos($value, $string) : strpos(drupal_strtolower($value), drupal_strtolower($string));
       if (($match == 'starts_with' && $pos === 0) || ($match == 'contains' && $pos !== FALSE)) {
         $options[$key] = $value;
         $count++;
@@ -199,9 +199,52 @@ function _autocomplete_widgets_get_options_suggested($field, $string = '', $matc
         $options = array($string);
       }
       break;
-    
+
   }
 
   return $options;
 }
 
+/**
+ * Fetch an array of options for the given widget (node_reference).
+ *
+ * Options are retrieved from the titles of the allowed node types.
+ */
+function _autocomplete_widgets_get_options_node_reference($field, $string = '', $match = 'contains', $keys = NULL, $limit = NULL) {
+  $field_name = $field['field_name'];
+  $table = 'field_data_' . $field_name;
+  $column = $field_name . '_value';
+  $options = array();
+
+  $field_query = db_select($table, 'fd')
+    ->fields('fd', array($column));
+
+  $node_title_query = db_select('node', 'n')
+    ->fields('n', array('title'))
+    ->condition('n.type', $field['widget']['settings']['allowed_node_types'], 'IN')
+    ->addTag('node_access');
+
+  if ($string !== '') {
+    switch ($match) {
+      case 'starts_with':
+        $field_query->condition($column, $string . '%', 'LIKE');
+        $node_title_query->condition('n.title', $string . '%', 'LIKE');
+        break;
+      case 'contains':
+      default:
+        $field_query->condition($column, '%' . $string . '%', 'LIKE');
+        $node_title_query->condition('n.title', '%' . $string . '%', 'LIKE');
+        break;
+    }
+    $rows = $node_title_query->execute()->fetchAll(PDO::FETCH_ASSOC);
+    foreach($rows as $row) {
+      $options[$row['title']] = $row['title'];
+    }
+    $rows = $field_query->execute()->fetchAll(PDO::FETCH_ASSOC);
+    foreach($rows as $row) {
+      $options[$row[$column]] = $row[$column];
+    }
+  }
+  sort($options);
+  return $options;
+}

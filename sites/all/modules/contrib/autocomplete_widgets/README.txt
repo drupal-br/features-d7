@@ -7,7 +7,7 @@
 OVERVIEW
 ========
 
-This module adds 3 autocomplete widgets for Drupal 7 
+This module adds 4 autocomplete widgets for Drupal 7
 
 - Autocomplete for allowed values list: This widget can be used for List fields
   and it takes candidate values from the defined list of Allowed values of the
@@ -20,6 +20,10 @@ This module adds 3 autocomplete widgets for Drupal 7
 - Autocomplete for suggested values: This widget can be used for Text only
   and it takes candidate values from a user-defined list of Suggested values.
 
+- Autocomplete for existing field data and some node titles: This widget works
+  just like the "existing field data" widget above except it will also suggest
+  node titles for nodes of a specific content type(s).
+
 All these widgets allow you to choose the size of the text element and the
 method used to match values between 'Starts with' and 'Contains'.
 
@@ -29,7 +33,6 @@ language assigned to their corresponding nodes. This option allows you to
 provide a different set of allowed values per language.
 
 [1] http://drupal.org/project/i18n
-
 
 
 INSTALLATION

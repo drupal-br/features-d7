@@ -44,33 +44,41 @@ function autocomplete_widgets_views_api() {
 function autocomplete_widgets_field_widget_info() {
   return array(
     'autocomplete_widgets_allowvals' => array(
-      'label' => t('Autocomplete for allowed values list'), 
+      'label' => t('Autocomplete for allowed values list'),
       'field types' => array('list_text', 'list_integer', 'list_decimal', 'list_float'),
       'settings' => array(
-        'size' => 60, 
-        'autocomplete_match' => 'contains', 
+        'size' => 60,
+        'autocomplete_match' => 'contains',
         'autocomplete_case' => 1,
       ),
     ),
     'autocomplete_widgets_flddata' => array(
-      'label' => t('Autocomplete for existing field data'), 
+      'label' => t('Autocomplete for existing field data'),
       'field types' => array('text'),
       'settings' => array(
-        'size' => 60, 
-        'autocomplete_match' => 'contains', 
+        'size' => 60,
+        'autocomplete_match' => 'contains',
         'autocomplete_case' => 1,
       ),
     ),
     'autocomplete_widgets_suggested' => array(
-      'label' => t('Autocomplete for predefined suggestions'), 
+      'label' => t('Autocomplete for predefined suggestions'),
       'field types' => array('text'),
       'settings' => array(
-        'size' => 60, 
-        'autocomplete_match' => 'contains', 
+        'size' => 60,
+        'autocomplete_match' => 'contains',
         'autocomplete_case' => 1,
       ),
     ),
-
+    'autocomplete_widgets_node_reference' => array(
+      'label' => t('Autocomplete for existing field data and some node titles'),
+      'field types' => array('text'),
+      'settings' => array(
+        'size' => 60,
+        'autocomplete_match' => 'contains',
+        'autocomplete_case' => 1,
+      ),
+    ),
   );
 }
 
@@ -115,11 +123,13 @@ function autocomplete_widgets_field_widget_form(&$form, &$form_state, $field, $i
     '#delta' => $delta,
     '#title' => $element['#title'],
     '#size' => $instance['widget']['settings']['size'],
+    '#maxlength' => $field['settings']['max_length'],
   );
-  
+
   switch($instance['widget']['type']) {
     case 'autocomplete_widgets_flddata':
     case 'autocomplete_widgets_suggested':
+    case 'autocomplete_widgets_node_reference':
       $element['value'] = array_merge($element['value'], array(
         '#type' => 'textfield',
         '#autocomplete_path' => 'autocomplete_widgets/'. $instance['entity_type'] . '/' . $instance['bundle'] . '/' . $element['#field_name'],
@@ -207,4 +217,65 @@ function autocomplete_widgets_json($entity_type, $bundle_name, $field_name, $str
  */
 function theme_autocomplete_widgets($element) {
   return $element['#children'];
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function autocomplete_widgets_field_formatter_info() {
+  return array(
+    'autocomplete_widgets_nr' => array(
+      'label' => t('Autocomplete widget node reference'),
+      'description' => t('Displays textfield as a link if there exists an allowed node with that title, otherwise as plain text.'),
+      'field types' => array('text'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function autocomplete_widgets_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $result = array();
+  switch ($display['type']) {
+    case 'autocomplete_widgets_nr':
+    switch ($field['type']) {
+      case 'text' :
+
+        if (isset($items[0]['value'])) {
+          // If there exists a node with that title, display it as a link.
+          $query = new EntityFieldQuery();
+          $nodes = $query->entityCondition('entity_type', 'node')
+            ->entityCondition('bundle', $instance['widget']['settings']['allowed_node_types'], 'IN')
+            ->propertyCondition('title', $items[0]['value'])
+            ->propertyCondition('status', 1);
+
+          $nodes = $nodes->execute();
+          $nid = array();
+          if (isset($nodes['node'])) {
+            foreach ($nodes['node'] as $key => $obj) {
+              $nid[] = $key;
+              // If there are more than one nodes having this title we
+              // only care about the first one.
+              break;
+            }
+          }
+          if(isset($nid[0])) {
+            $node = node_load($nid[0]);
+            return array( array(
+              '#markup' => l($node->title, 'node/' . $node->nid),
+              ),
+            );
+          }
+          // If no node found with this title, display name as plain text.
+          return array( array(
+            '#markup' => $items[0]['value'],
+            ),
+          );
+        }
+        break;
+    }
+    break;
+  }
+  return $result;
 }

@@ -6,9 +6,11 @@ configure = admin/config/content/easysocial
 tags[] = social
 tags[] = share
 dependencies[] = variable
-; Information added by drupal.org packaging script on 2012-01-05
-version = "7.x-2.5"
+; Views handler
+files[] = views/easy_social_handler_field.inc
+; Information added by drupal.org packaging script on 2012-07-23
+version = "7.x-2.9"
 core = "7.x"
 project = "easy_social"
-datestamp = "1325796640"
+datestamp = "1343020615"
 

@@ -10,7 +10,7 @@
 function dbr_groups_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'node-dbr_group-body'
+  // Exported field: 'node-dbr_group-body'.
   $fields['node-dbr_group-body'] = array(
     'field_config' => array(
       'active' => '1',
@@ -33,6 +33,7 @@ function dbr_groups_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '0',
       'module' => 'text',
       'settings' => array(),
       'translatable' => '0',
@@ -83,7 +84,7 @@ function dbr_groups_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-dbr_group-field_image_group'
+  // Exported field: 'node-dbr_group-field_image_group'.
   $fields['node-dbr_group-field_image_group'] = array(
     'field_config' => array(
       'active' => '1',
@@ -104,6 +105,7 @@ function dbr_groups_field_default_fields() {
           0 => 'fid',
         ),
       ),
+      'locked' => '0',
       'module' => 'image',
       'settings' => array(
         'default_image' => 0,
@@ -140,6 +142,7 @@ function dbr_groups_field_default_fields() {
       'required' => 0,
       'settings' => array(
         'alt_field' => 0,
+        'default_image' => 0,
         'file_directory' => 'images/groups',
         'file_extensions' => 'png gif jpg jpeg',
         'max_filesize' => '20 KB',
@@ -161,7 +164,7 @@ function dbr_groups_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-dbr_group-field_tags'
+  // Exported field: 'node-dbr_group-field_tags'.
   $fields['node-dbr_group-field_tags'] = array(
     'field_config' => array(
       'active' => '1',
@@ -182,6 +185,7 @@ function dbr_groups_field_default_fields() {
           0 => 'tid',
         ),
       ),
+      'locked' => '0',
       'module' => 'taxonomy',
       'settings' => array(
         'allowed_values' => array(
@@ -234,7 +238,7 @@ function dbr_groups_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-dbr_group-group_group'
+  // Exported field: 'node-dbr_group-group_group'.
   $fields['node-dbr_group-group_group'] = array(
     'field_config' => array(
       'active' => '1',
@@ -248,6 +252,7 @@ function dbr_groups_field_default_fields() {
           0 => 'value',
         ),
       ),
+      'locked' => '0',
       'module' => 'list',
       'no_ui' => TRUE,
       'settings' => array(

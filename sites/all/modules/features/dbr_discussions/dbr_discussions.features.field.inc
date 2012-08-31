@@ -10,7 +10,7 @@
 function dbr_discussions_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'node-dbr_discussion-body'
+  // Exported field: 'node-dbr_discussion-body'.
   $fields['node-dbr_discussion-body'] = array(
     'field_config' => array(
       'active' => '1',
@@ -33,6 +33,7 @@ function dbr_discussions_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '0',
       'module' => 'text',
       'settings' => array(),
       'translatable' => '0',
@@ -83,7 +84,7 @@ function dbr_discussions_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-dbr_discussion-field_tags'
+  // Exported field: 'node-dbr_discussion-field_tags'.
   $fields['node-dbr_discussion-field_tags'] = array(
     'field_config' => array(
       'active' => '1',
@@ -104,6 +105,7 @@ function dbr_discussions_field_default_fields() {
           0 => 'tid',
         ),
       ),
+      'locked' => '0',
       'module' => 'taxonomy',
       'settings' => array(
         'allowed_values' => array(
@@ -156,7 +158,7 @@ function dbr_discussions_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-dbr_discussion-field_version'
+  // Exported field: 'node-dbr_discussion-field_version'.
   $fields['node-dbr_discussion-field_version'] = array(
     'field_config' => array(
       'active' => '1',
@@ -177,6 +179,7 @@ function dbr_discussions_field_default_fields() {
           0 => 'tid',
         ),
       ),
+      'locked' => '0',
       'module' => 'taxonomy',
       'settings' => array(
         'allowed_values' => array(
@@ -226,7 +229,7 @@ function dbr_discussions_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-dbr_discussion-group_audience'
+  // Exported field: 'node-dbr_discussion-group_audience'.
   $fields['node-dbr_discussion-group_audience'] = array(
     'field_config' => array(
       'active' => '1',
@@ -247,6 +250,7 @@ function dbr_discussions_field_default_fields() {
           0 => 'gid',
         ),
       ),
+      'locked' => '0',
       'module' => 'og',
       'no_ui' => TRUE,
       'settings' => array(),
@@ -256,6 +260,7 @@ function dbr_discussions_field_default_fields() {
     'field_instance' => array(
       'bundle' => 'dbr_discussion',
       'default_value' => NULL,
+      'default_value_function' => 'og_field_audience_default_value',
       'deleted' => '0',
       'description' => '',
       'display' => array(

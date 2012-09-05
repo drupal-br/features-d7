@@ -111,7 +111,7 @@ function dbr_discussions_field_default_fields() {
         'allowed_values' => array(
           0 => array(
             'vocabulary' => 'tags',
-            'parent' => '0',
+            'parent' => 0,
           ),
         ),
       ),

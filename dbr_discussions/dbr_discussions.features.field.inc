@@ -125,7 +125,7 @@ function dbr_discussions_field_default_fields() {
       'description' => 'Inclua palavras-chave para facilitar o cruzamento com outros conteúdos. Separe as palavras com vírgula.',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'inline',
           'module' => 'taxonomy',
           'settings' => array(),
           'type' => 'taxonomy_term_reference_link',
@@ -199,7 +199,7 @@ function dbr_discussions_field_default_fields() {
       'description' => 'Selecione a versão do Drupal que se aplica ao conteúdo.',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'inline',
           'module' => 'taxonomy',
           'settings' => array(),
           'type' => 'taxonomy_term_reference_link',
@@ -265,7 +265,7 @@ function dbr_discussions_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'inline',
           'module' => 'og',
           'settings' => array(),
           'type' => 'og_list_default',

@@ -22,7 +22,7 @@ function dbr_discussions_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Discussoes recentes';
+  $handler->display->display_options['title'] = 'Discussões';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
@@ -35,6 +35,18 @@ function dbr_discussions_views_default_views() {
   $handler->display->display_options['relationships']['uid']['id'] = 'uid';
   $handler->display->display_options['relationships']['uid']['table'] = 'node';
   $handler->display->display_options['relationships']['uid']['field'] = 'uid';
+  /* Relationship: Content: Last comment author */
+  $handler->display->display_options['relationships']['last_comment_uid']['id'] = 'last_comment_uid';
+  $handler->display->display_options['relationships']['last_comment_uid']['table'] = 'node_comment_statistics';
+  $handler->display->display_options['relationships']['last_comment_uid']['field'] = 'last_comment_uid';
+  /* Field: User: Picture */
+  $handler->display->display_options['fields']['picture']['id'] = 'picture';
+  $handler->display->display_options['fields']['picture']['table'] = 'users';
+  $handler->display->display_options['fields']['picture']['field'] = 'picture';
+  $handler->display->display_options['fields']['picture']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['picture']['label'] = '';
+  $handler->display->display_options['fields']['picture']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
   /* Field: User: Name */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'users';
@@ -61,8 +73,16 @@ function dbr_discussions_views_default_views() {
   $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing_1']['label'] = 'Título';
-  $handler->display->display_options['fields']['nothing_1']['alter']['text'] = '[title]  <br />
+  $handler->display->display_options['fields']['nothing_1']['alter']['text'] = '[picture] [title]  <br />
 Por [name] em [created]';
+  /* Field: User: Picture */
+  $handler->display->display_options['fields']['picture_1']['id'] = 'picture_1';
+  $handler->display->display_options['fields']['picture_1']['table'] = 'users';
+  $handler->display->display_options['fields']['picture_1']['field'] = 'picture';
+  $handler->display->display_options['fields']['picture_1']['relationship'] = 'last_comment_uid';
+  $handler->display->display_options['fields']['picture_1']['label'] = '';
+  $handler->display->display_options['fields']['picture_1']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['picture_1']['element_label_colon'] = FALSE;
   /* Field: Content: Last comment author */
   $handler->display->display_options['fields']['last_comment_name']['id'] = 'last_comment_name';
   $handler->display->display_options['fields']['last_comment_name']['table'] = 'node_comment_statistics';
@@ -94,7 +114,7 @@ Por [name] em [created]';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['label'] = 'Última resposta';
-  $handler->display->display_options['fields']['nothing']['alter']['text'] = 'A [last_comment_timestamp]<br />
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '[picture_1] A [last_comment_timestamp]<br />
 Por [last_comment_name]';
   /* Field: Content: Comment count */
   $handler->display->display_options['fields']['comment_count']['id'] = 'comment_count';
@@ -118,6 +138,8 @@ Por [last_comment_name]';
   $handler->display->display_options['arguments']['group_audience_gid']['table'] = 'field_data_group_audience';
   $handler->display->display_options['arguments']['group_audience_gid']['field'] = 'group_audience_gid';
   $handler->display->display_options['arguments']['group_audience_gid']['default_action'] = 'empty';
+  $handler->display->display_options['arguments']['group_audience_gid']['title_enable'] = TRUE;
+  $handler->display->display_options['arguments']['group_audience_gid']['title'] = '%1';
   $handler->display->display_options['arguments']['group_audience_gid']['default_argument_type'] = 'fixed';
   $handler->display->display_options['arguments']['group_audience_gid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['group_audience_gid']['summary']['format'] = 'default_summary';
@@ -143,6 +165,12 @@ Por [last_comment_name]';
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['path'] = 'node/%/discussoes-tbl';
+  $handler->display->display_options['menu']['type'] = 'tab';
+  $handler->display->display_options['menu']['title'] = 'Discussões';
+  $handler->display->display_options['menu']['description'] = 'Discussões do grupo';
+  $handler->display->display_options['menu']['weight'] = '1';
+  $handler->display->display_options['menu']['name'] = 'main-menu';
+  $handler->display->display_options['menu']['context'] = 0;
   $export['dbr_discussion_table'] = $view;
 
   $view = new view();

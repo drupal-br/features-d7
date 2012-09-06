@@ -10,7 +10,7 @@
 function dbr_profile_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'user-user-field_availability'
+  // Exported field: 'user-user-field_availability'.
   $fields['user-user-field_availability'] = array(
     'field_config' => array(
       'active' => '1',
@@ -24,6 +24,7 @@ function dbr_profile_field_default_fields() {
           0 => 'value',
         ),
       ),
+      'locked' => '0',
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
@@ -67,7 +68,7 @@ function dbr_profile_field_default_fields() {
     ),
   );
 
-  // Exported field: 'user-user-field_city'
+  // Exported field: 'user-user-field_city'.
   $fields['user-user-field_city'] = array(
     'field_config' => array(
       'active' => '1',
@@ -88,6 +89,7 @@ function dbr_profile_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '0',
       'module' => 'text',
       'settings' => array(
         'max_length' => '255',
@@ -133,7 +135,7 @@ function dbr_profile_field_default_fields() {
     ),
   );
 
-  // Exported field: 'user-user-field_fullname'
+  // Exported field: 'user-user-field_fullname'.
   $fields['user-user-field_fullname'] = array(
     'field_config' => array(
       'active' => '1',
@@ -154,6 +156,7 @@ function dbr_profile_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '0',
       'module' => 'text',
       'settings' => array(
         'max_length' => '255',
@@ -195,7 +198,7 @@ function dbr_profile_field_default_fields() {
     ),
   );
 
-  // Exported field: 'user-user-field_gender'
+  // Exported field: 'user-user-field_gender'.
   $fields['user-user-field_gender'] = array(
     'field_config' => array(
       'active' => '1',
@@ -209,6 +212,7 @@ function dbr_profile_field_default_fields() {
           0 => 'value',
         ),
       ),
+      'locked' => '0',
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
@@ -251,7 +255,7 @@ function dbr_profile_field_default_fields() {
     ),
   );
 
-  // Exported field: 'user-user-field_state'
+  // Exported field: 'user-user-field_state'.
   $fields['user-user-field_state'] = array(
     'field_config' => array(
       'active' => '1',
@@ -265,6 +269,7 @@ function dbr_profile_field_default_fields() {
           0 => 'value',
         ),
       ),
+      'locked' => '0',
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
@@ -332,7 +337,7 @@ function dbr_profile_field_default_fields() {
     ),
   );
 
-  // Exported field: 'user-user-field_tags'
+  // Exported field: 'user-user-field_tags'.
   $fields['user-user-field_tags'] = array(
     'field_config' => array(
       'active' => '1',
@@ -353,12 +358,13 @@ function dbr_profile_field_default_fields() {
           0 => 'tid',
         ),
       ),
+      'locked' => '0',
       'module' => 'taxonomy',
       'settings' => array(
         'allowed_values' => array(
           0 => array(
             'vocabulary' => 'tags',
-            'parent' => '0',
+            'parent' => 0,
           ),
         ),
       ),
@@ -399,7 +405,7 @@ function dbr_profile_field_default_fields() {
     ),
   );
 
-  // Exported field: 'user-user-field_website'
+  // Exported field: 'user-user-field_website'.
   $fields['user-user-field_website'] = array(
     'field_config' => array(
       'active' => '1',
@@ -409,6 +415,7 @@ function dbr_profile_field_default_fields() {
       'field_name' => 'field_website',
       'foreign keys' => array(),
       'indexes' => array(),
+      'locked' => '0',
       'module' => 'link',
       'settings' => array(
         'attributes' => array(
